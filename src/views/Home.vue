@@ -78,7 +78,7 @@
           >
             <template slot-scope="scope">
               <span>{{scope.row.class}}</span>
-              <i class="el-icon-edit pointer" @click="openEditDialog(scope.row)"></i>
+              <i class="el-icon-edit pointer" @click="openEditDialog(scope.$index,scope.row)"></i>
             </template>
           </el-table-column>
           <el-table-column prop="score" label="分数" width="150px" sortable="custom">
@@ -89,7 +89,7 @@
           <el-table-column prop="remark" label="备注" width="100">
             <template slot-scope="scope">
               <span>{{scope.row.remark}}</span>
-              <i class="el-icon-edit pointer" @click="openEditDialog(scope.row)"></i>
+              <i class="el-icon-edit pointer" @click="openEditDialog(scope.$index,scope.row)"></i>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="120">
@@ -194,6 +194,7 @@ export default {
         class: "",
         score: 0,
         remark: "",
+        index: null
       },
       classTag: [],
       treeProps: {
@@ -229,6 +230,7 @@ export default {
           break;
         case "edit":
           this.editData = this.$noBind(command.row);
+          this.editData.index = command.index;
           this.dialogFormVisible = true;
           break;
         case "delete":
@@ -345,14 +347,15 @@ export default {
       console.log(tree);
       this.pathTree = tree;
     },
-    openEditDialog(row) {
+    openEditDialog(index, row) {
       this.editData = this.$noBind(row);
+      this.editData.index = index;
       this.dialogFormVisible = true;
     },
     saveEdit() {
       let result = this.updateInfo(this.editData);
       if (result == "ok") {
-        this.getMediaData();
+        this.$set(this.tableData, this.editData.index, this.editData);
         this.dialogFormVisible = false;
       }
     },
