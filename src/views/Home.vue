@@ -9,6 +9,7 @@
           clearable
           v-model="tableConfig.keyWord"
           @change="getMediaData"
+          @input="getMediaData"
           style="width: 150px;"
         ></el-input>
       </label>
@@ -208,8 +209,13 @@ export default {
   created() {
     console.log(ipcRenderer.sendSync("main-sync", "ping"));
     this.isShowPathTree = !!store.get("showPathTree");
+    let paths = store.get("searchPaths");
+    this.tableConfig.paths = paths ? paths : [];
     this.getMediaData();
     this.getMediaDistinct();
+  },
+  mounted() {
+    this.$refs.tree.setCheckedKeys(this.tableConfig.paths);
   },
   methods: {
     beforeHandleCommand(index, row, type) {
@@ -383,12 +389,13 @@ export default {
           newPaths.push(path);
         }
       });
-      console.log(newPaths);
+      store.set("searchPaths", newPaths);
       this.tableConfig.paths = newPaths;
       this.getMediaData();
     },
     resetChecked() {
       this.$refs.tree.setCheckedKeys([]);
+      store.set("searchPaths", []);
       this.tableConfig.paths = [];
       this.getMediaData();
     },

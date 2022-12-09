@@ -35,7 +35,7 @@
       </div>
       <div class="mb20 color-666">
         索引文件大于
-        <el-input type="number" v-model.number="config.minSize" placeholder style="width: 70px;"></el-input>(m)
+        <el-input type="number" v-model.number="config.minSize" placeholder style="width: 70px;"></el-input>(kb)
       </div>
       <div class="mb10">
         <p class="color-666 mb5">索引组合</p>
@@ -67,7 +67,7 @@ const defaultConfig = {
     ".m2t",
     ".mts",
   ],
-  minSize: 5,
+  minSize: 100,
   hashType: {
     mtime: true,
     size: true,
@@ -86,7 +86,7 @@ export default {
     return {
       config: {
         exts: [],
-        minSize: 5,
+        minSize: 100,
         hashType: {},
       },
       isShowConfig: false,
@@ -137,6 +137,9 @@ export default {
     handleInputConfirm() {
       let inputValue = this.inputValue;
       if (inputValue) {
+        if (inputValue.indexOf('.') == -1) {
+          inputValue = '.' + inputValue;
+        }
         this.config.exts.push(inputValue);
       }
       this.inputVisible = false;

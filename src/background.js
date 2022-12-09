@@ -50,7 +50,7 @@ function walkSync(currentDirPath, config, callback) {
     }
     if (stat.isFile()) {
       var ext = path.extname(name);
-      if (config.exts.indexOf(ext) != -1 && stat.size > (config.minSize * 1048576)) {
+      if (config.exts.indexOf(ext) != -1 && stat.size > (config.minSize * 1024)) {
         filePath = path.dirname(filePath);
         callback(name, filePath, stat);
       }
